@@ -35,43 +35,55 @@ public_users.get('/', function (req, res) {
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  let isbn = req.params.isbn;
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let isbn = req.params.isbn;
 
-  let retrieved = books[isbn];
-  
-  if (retrieved) {
-    return res.send(retrieved);
-  } else {
-    return res.status(404).send({message: "Unable to retrieve book"})
-  }
+      let retrieved = books[isbn];
+      
+      if (retrieved) {
+        resolve (res.send(retrieved));
+      } else {
+        return (res.status(404).send({message: "Unable to retrieve book"}));
+      }
+    }, 2000)
+  })
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  let author = req.params.author;
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let author = req.params.author;
 
-  let retrieved = Object.values(books).filter(book => book.author === author);
-
-  if (retrieved.length > 0) {
-    return res.status(200).json(retrieved);
-  } else {
-    return res.status(404).json({message: "No books found for this author"})
-  }
+      let retrieved = Object.values(books).filter(book => book.author === author);
+    
+      if (retrieved.length > 0) {
+        resolve (res.status(200).json(retrieved));
+      } else {
+        return res.status(404).json({message: "No books found for this author"})
+      }
+    }, 2000);
+  })
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  let title = req.params.title;
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let title = req.params.title;
 
-  let result = Object.values(books).filter(book => book.title === title);
-
-  if (result.length > 0) {
-    return res.status(200).json(result);
-  } else {
-    return res.status(404).json({message: "No books found for this title"})
-  }
+      let result = Object.values(books).filter(book => book.title === title);
+    
+      if (result.length > 0) {
+        resolve (res.status(200).json(result));
+      } else {
+        reject (res.status(404).json({message: "No books found for this title"}))
+      }
+    }, 2000);
+  })
 });
 
 //  Get book review
